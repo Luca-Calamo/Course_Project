@@ -5,9 +5,7 @@ html {
 .app-container {
     width: 100vw;
     height: 100vh;
-    display: flex;
-    flex-direction: row;
-    background: black;
+    position: relative;
     overflow: hidden;
     margin: 0;
     padding: 0;
@@ -15,6 +13,9 @@ html {
 }
 
 .info-section {
+    position: absolute;
+    right: 0;
+    top: 0;
     width: 33.333%;
     height: 100vh;
     display: flex;
@@ -23,6 +24,8 @@ html {
     align-items: center;
     gap: 2rem;
     padding: 2rem;
+    z-index: 10;
+    transform: translateZ(0);
 }
 
 .info-section h1 {
@@ -62,18 +65,24 @@ html {
 }
 
 .image-section {
-    width: 66.666%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 1;
 }
 
 .stage-image {
-    max-width: 90%;
-    max-height: 90vh;
-    object-fit: contain;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
     transition: opacity 0.5s ease-in-out;
+    will-change: opacity;
+    transform: translateZ(0);
 }
 
 .stage-image.fade-in {
@@ -132,4 +141,24 @@ html {
 .start-button:hover {
     background: #950705;
     transform: scale(1.05);
+}
+
+.intro-hidden {
+    opacity: 0;
+}
+
+.intro-fade-in {
+    animation: fadeIn 0.8s ease-in forwards;
+    will-change: opacity;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateZ(0);
+    }
+    to {
+        opacity: 1;
+        transform: translateZ(0);
+    }
 }

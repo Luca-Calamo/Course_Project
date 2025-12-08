@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
+import introVideo from './assets/video/0001-0500.mp4';
 
 const stages = [
     {
@@ -50,14 +51,17 @@ function App() {
     const [showIntro, setShowIntro] = useState(true);
     const [currentStage, setCurrentStage] = useState(0);
     const [isTransitioning, setIsTransitioning] = useState(false);
+    const [showIntroText, setShowIntroText] = useState(false);
 
     const startJourney = () => {
         setShowIntro(false);
+        setShowIntroText(false);
     };
 
     const startAgain = () => {
         setCurrentStage(0);
         setShowIntro(true);
+        setShowIntroText(false);
     };
 
     const goToNextStage = () => {
@@ -85,26 +89,44 @@ function App() {
     if (showIntro) {
         return (
             <div className='app-container'>
-                <div className='info-section'>
-                    <h1>The Life Cycle of a Massive Star</h1>
-                    <button onClick={startJourney} className='start-button'>
-                        Start your journey
-                    </button>
-                </div>
-
                 <div className='image-section'>
-                    <img
-                        src='https://assets.science.nasa.gov/content/dam/science/missions/hubble/releases/2018/10/STScI-01EVS3HXBA56TEHDMRRFRCT9F9.mp4/jcr:content/renditions/1024x953.gif'
-                        alt='Introduction'
+                    <video
+                        src={introVideo}
                         className='stage-image'
+                        autoPlay
+                        muted
+                        playsInline
+                        preload='auto'
+                        onEnded={() => {
+                            setShowIntroText(true);
+                        }}
                     />
                 </div>
+
+                {showIntroText && (
+                    <div className='info-section intro-fade-in'>
+                        <h1>The Life Cycle of a Massive Star</h1>
+                        <button onClick={startJourney} className='start-button'>
+                            Start your journey
+                        </button>
+                    </div>
+                )}
             </div>
         );
     }
 
     return (
         <div className='app-container'>
+            <div className='image-section'>
+                <img
+                    src={stages[currentStage].image}
+                    alt={stages[currentStage].name}
+                    className={`stage-image ${
+                        isTransitioning ? 'fade-out' : 'fade-in'
+                    }`}
+                />
+            </div>
+
             <div className='info-section'>
                 <h1 className={isTransitioning ? 'fade-out' : 'fade-in'}>
                     {stages[currentStage].name}
@@ -123,16 +145,6 @@ function App() {
                         <button onClick={goToNextStage}>Next</button>
                     )}
                 </div>
-            </div>
-
-            <div className='image-section'>
-                <img
-                    src={stages[currentStage].image}
-                    alt={stages[currentStage].name}
-                    className={`stage-image ${
-                        isTransitioning ? 'fade-out' : 'fade-in'
-                    }`}
-                />
             </div>
         </div>
     );
