@@ -47,18 +47,8 @@ const stages = [
 ];
 
 function App() {
-    const [showIntro, setShowIntro] = useState(true);
     const [currentStage, setCurrentStage] = useState(0);
     const [isTransitioning, setIsTransitioning] = useState(false);
-
-    const startJourney = () => {
-        setShowIntro(false);
-    };
-
-    const startAgain = () => {
-        setCurrentStage(0);
-        setShowIntro(true);
-    };
 
     const goToNextStage = () => {
         if (currentStage < stages.length - 1) {
@@ -71,9 +61,7 @@ function App() {
     };
 
     const goToPreviousStage = () => {
-        if (currentStage === 0) {
-            setShowIntro(true);
-        } else if (currentStage > 0) {
+        if (currentStage > 0) {
             setIsTransitioning(true);
             setTimeout(() => {
                 setCurrentStage(currentStage - 1);
@@ -81,27 +69,6 @@ function App() {
             }, 500);
         }
     };
-
-    if (showIntro) {
-        return (
-            <div className='app-container'>
-                <div className='info-section'>
-                    <h1>The Life Cycle of a Massive Star</h1>
-                    <button onClick={startJourney} className='start-button'>
-                        Start your journey
-                    </button>
-                </div>
-
-                <div className='image-section'>
-                    <img
-                        src='https://assets.science.nasa.gov/content/dam/science/missions/hubble/releases/2018/10/STScI-01EVS3HXBA56TEHDMRRFRCT9F9.mp4/jcr:content/renditions/1024x953.gif'
-                        alt='Introduction'
-                        className='stage-image'
-                    />
-                </div>
-            </div>
-        );
-    }
 
     return (
         <div className='app-container'>
@@ -113,15 +80,21 @@ function App() {
                     {stages[currentStage].description}
                 </p>
                 <div className='controls'>
-                    <button onClick={goToPreviousStage}>Previous</button>
+                    <button
+                        onClick={goToPreviousStage}
+                        disabled={currentStage === 0}
+                    >
+                        Previous
+                    </button>
                     <span>
                         {currentStage + 1} / {stages.length}
                     </span>
-                    {currentStage === stages.length - 1 ? (
-                        <button onClick={startAgain}>Start Again</button>
-                    ) : (
-                        <button onClick={goToNextStage}>Next</button>
-                    )}
+                    <button
+                        onClick={goToNextStage}
+                        disabled={currentStage === stages.length - 1}
+                    >
+                        Next
+                    </button>
                 </div>
             </div>
 

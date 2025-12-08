@@ -11,54 +11,38 @@ const stages = [
     {
         name: 'Protostar',
         image: 'https://assets.science.nasa.gov/content/dam/science/missions/hubble/releases/2018/10/STScI-01EVS3HXBA56TEHDMRRFRCT9F9.mp4/jcr:content/renditions/1024x953.gif',
-        description:
-            'As the nebula collapses, the gas and dust condense into a dense core called a protostar. Gravitational energy converts into heat, and the core temperature rises, but nuclear fusion has not yet begun.',
+        description: '',
     },
     {
         name: 'Main Sequence',
         image: 'https://assets.science.nasa.gov/content/dam/science/missions/hubble/releases/2018/10/STScI-01EVS3HXBA56TEHDMRRFRCT9F9.mp4/jcr:content/renditions/1024x953.gif',
-        description:
-            'When the core reaches about 10 million Kelvin, hydrogen fusion ignites. The star enters the main sequence, producing energy steadily by fusing hydrogen into helium. Massive stars burn hotter and brighter but live much shorter lives than smaller stars.',
+        description: '',
     },
     {
         name: 'Red Supergiant',
         image: 'https://assets.science.nasa.gov/content/dam/science/missions/hubble/releases/2018/10/STScI-01EVS3HXBA56TEHDMRRFRCT9F9.mp4/jcr:content/renditions/1024x953.gif',
-        description:
-            'After exhausting hydrogen in the core, fusion moves outward into surrounding layers. The core contracts and heats up while the outer layers expand, forming a red supergiant. Heavier elements like carbon, oxygen, and silicon begin to form through successive fusion stages.',
+        description: '',
     },
     {
         name: 'Supernova',
         image: 'https://assets.science.nasa.gov/content/dam/science/missions/hubble/releases/2018/10/STScI-01EVS3HXBA56TEHDMRRFRCT9F9.mp4/jcr:content/renditions/1024x953.gif',
-        description:
-            'When the core’s fusion stops at iron, it can no longer resist gravity. The core collapses instantly, triggering a massive explosion called a supernova. This event blasts heavy elements into space and briefly outshines an entire galaxy.',
+        description: '',
     },
     {
         name: 'Black Hole',
         image: 'https://assets.science.nasa.gov/content/dam/science/missions/hubble/releases/2018/10/STScI-01EVS3HXBA56TEHDMRRFRCT9F9.mp4/jcr:content/renditions/1024x953.gif',
-        description:
-            'If the remaining core after the supernova is more than about three solar masses, gravity overwhelms all other forces, compressing matter into an infinitely dense point—a black hole—from which not even light can escape.',
+        description: '',
     },
     {
         name: 'Heat Death',
         image: 'https://assets.science.nasa.gov/content/dam/science/missions/hubble/releases/2018/10/STScI-01EVS3HXBA56TEHDMRRFRCT9F9.mp4/jcr:content/renditions/1024x953.gif',
-        description:
-            'Over unimaginable timescales, black holes slowly evaporate through Hawking radiation. When the last black hole vanishes, the universe will reach heat death—a state of maximum entropy where no usable energy remains and all processes cease. There will be no stars, no matter, nothing.',
+        description: '',
     },
 ];
 
 function App() {
-    const [showIntro, setShowIntro] = useState(true);
     const [currentStage, setCurrentStage] = useState(0);
     const [isTransitioning, setIsTransitioning] = useState(false);
-
-    const startJourney = () => {
-        setShowIntro(false);
-    };
-
-    const startAgain = () => {
-        setCurrentStage(0);
-        setShowIntro(true);
-    };
 
     const goToNextStage = () => {
         if (currentStage < stages.length - 1) {
@@ -71,9 +55,7 @@ function App() {
     };
 
     const goToPreviousStage = () => {
-        if (currentStage === 0) {
-            setShowIntro(true);
-        } else if (currentStage > 0) {
+        if (currentStage > 0) {
             setIsTransitioning(true);
             setTimeout(() => {
                 setCurrentStage(currentStage - 1);
@@ -81,27 +63,6 @@ function App() {
             }, 500);
         }
     };
-
-    if (showIntro) {
-        return (
-            <div className='app-container'>
-                <div className='info-section'>
-                    <h1>The Life Cycle of a Massive Star</h1>
-                    <button onClick={startJourney} className='start-button'>
-                        Start your journey
-                    </button>
-                </div>
-
-                <div className='image-section'>
-                    <img
-                        src='https://assets.science.nasa.gov/content/dam/science/missions/hubble/releases/2018/10/STScI-01EVS3HXBA56TEHDMRRFRCT9F9.mp4/jcr:content/renditions/1024x953.gif'
-                        alt='Introduction'
-                        className='stage-image'
-                    />
-                </div>
-            </div>
-        );
-    }
 
     return (
         <div className='app-container'>
@@ -113,15 +74,21 @@ function App() {
                     {stages[currentStage].description}
                 </p>
                 <div className='controls'>
-                    <button onClick={goToPreviousStage}>Previous</button>
+                    <button
+                        onClick={goToPreviousStage}
+                        disabled={currentStage === 0}
+                    >
+                        Previous
+                    </button>
                     <span>
                         {currentStage + 1} / {stages.length}
                     </span>
-                    {currentStage === stages.length - 1 ? (
-                        <button onClick={startAgain}>Start Again</button>
-                    ) : (
-                        <button onClick={goToNextStage}>Next</button>
-                    )}
+                    <button
+                        onClick={goToNextStage}
+                        disabled={currentStage === stages.length - 1}
+                    >
+                        Next
+                    </button>
                 </div>
             </div>
 

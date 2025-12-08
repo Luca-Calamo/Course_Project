@@ -71,9 +71,7 @@ function App() {
     };
 
     const goToPreviousStage = () => {
-        if (currentStage === 0) {
-            setShowIntro(true);
-        } else if (currentStage > 0) {
+        if (currentStage > 0) {
             setIsTransitioning(true);
             setTimeout(() => {
                 setCurrentStage(currentStage - 1);
@@ -86,7 +84,7 @@ function App() {
         return (
             <div className='app-container'>
                 <div className='info-section'>
-                    <h1>The Life Cycle of a Massive Star</h1>
+                    <h1>The life cycle of a massive star</h1>
                     <button onClick={startJourney} className='start-button'>
                         Start your journey
                     </button>
@@ -113,7 +111,12 @@ function App() {
                     {stages[currentStage].description}
                 </p>
                 <div className='controls'>
-                    <button onClick={goToPreviousStage}>Previous</button>
+                    <button
+                        onClick={goToPreviousStage}
+                        disabled={currentStage === 0}
+                    >
+                        Previous
+                    </button>
                     <span>
                         {currentStage + 1} / {stages.length}
                     </span>

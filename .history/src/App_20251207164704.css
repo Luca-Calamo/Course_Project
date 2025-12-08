@@ -31,7 +31,6 @@ html {
     text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
     transition: opacity 0.5s ease-in-out;
     margin: 0;
-    text-align: center;
 }
 
 .info-section h1.fade-in {
@@ -96,40 +95,73 @@ html {
 .controls button {
     padding: 1rem 2rem;
     font-size: 1.2rem;
-    cursor: crosshair;
+    cursor: pointer;
     background: #c33c07;
     color: white;
     border: none;
     border-radius: 8px;
-    transition: background 0.3s, transform 0.3s;
-    outline: none;
+    transition: background 0.3s;
 }
 
 .controls button:hover:not(:disabled) {
-    background: #950705;
-    transform: scale(1.05);
+    background: #535bf2;
 }
 
 .controls button:disabled {
     background: #333;
-    cursor: crosshair;
+    cursor: not-allowed;
     opacity: 0.5;
 }
 
 .start-button {
     padding: 1.5rem 3rem;
     font-size: 1.5rem;
-    cursor: crosshair;
+    cursor: pointer;
     background: #c33c07;
     color: white;
     border: none;
     border-radius: 8px;
-    transition: background 0.3s, transform 0.3s;
+    transition: background 0.3s;
     font-family: 'Courier New', Courier, monospace;
-    outline: none;
 }
 
 .start-button:hover {
-    background: #950705;
-    transform: scale(1.05);
+    background: #535bf2;
+}
+
+.sparkle {
+    position: absolute;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+.sparkle::before,
+.sparkle::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, white, transparent);
+    animation: twinkle 0.8s ease-out forwards;
+}
+
+.sparkle::after {
+    transform: rotate(90deg);
+}
+
+@keyframes twinkle {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0);
+    }
+    50% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.5);
+    }
 }

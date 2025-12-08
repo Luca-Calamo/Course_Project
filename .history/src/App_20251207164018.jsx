@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
+import { fairyDustCursor } from 'cursor-effects';
 
 const stages = [
     {
@@ -51,6 +52,16 @@ function App() {
     const [currentStage, setCurrentStage] = useState(0);
     const [isTransitioning, setIsTransitioning] = useState(false);
 
+    useEffect(() => {
+        const cursorEffect = fairyDustCursor({
+            colors: ['#ffffff', '#ffdd00', '#ffa500']
+        });
+
+        return () => {
+            cursorEffect.destroy();
+        };
+    }, []);
+
     const startJourney = () => {
         setShowIntro(false);
     };
@@ -86,7 +97,7 @@ function App() {
         return (
             <div className='app-container'>
                 <div className='info-section'>
-                    <h1>The Life Cycle of a Massive Star</h1>
+                    <h1>The life cycle of a massive star</h1>
                     <button onClick={startJourney} className='start-button'>
                         Start your journey
                     </button>

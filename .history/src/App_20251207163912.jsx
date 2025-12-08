@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
+import { fairyDustCursor } from 'cursor-effects';
 
 const stages = [
     {
@@ -51,6 +52,38 @@ function App() {
     const [currentStage, setCurrentStage] = useState(0);
     const [isTransitioning, setIsTransitioning] = useState(false);
 
+    useEffect(() => {
+        let lastSparkleTime = 0;
+        const sparkleInterval = 100;
+
+        const handleMouseMove = (e) => {
+            const now = Date.now();
+            if (now - lastSparkleTime < sparkleInterval) return;
+            lastSparkleTime = now;
+
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.style.left = e.pageX + 'px';
+            sparkle.style.top = e.pageY + 'px';
+
+            const size = Math.random() * 35 + 35;
+            sparkle.style.width = size + 'px';
+            sparkle.style.height = size + 'px';
+
+            document.body.appendChild(sparkle);
+
+            setTimeout(() => {
+                sparkle.remove();
+            }, 1000);
+        };
+
+        document.addEventListener('mousemove', handleMouseMove);
+
+        return () => {
+            document.removeEventListener('mousemove', handleMouseMove);
+        };
+    }, []);
+
     const startJourney = () => {
         setShowIntro(false);
     };
@@ -86,7 +119,7 @@ function App() {
         return (
             <div className='app-container'>
                 <div className='info-section'>
-                    <h1>The Life Cycle of a Massive Star</h1>
+                    <h1>The life cycle of a massive star</h1>
                     <button onClick={startJourney} className='start-button'>
                         Start your journey
                     </button>

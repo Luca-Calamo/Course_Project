@@ -31,7 +31,6 @@ html {
     text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
     transition: opacity 0.5s ease-in-out;
     margin: 0;
-    text-align: center;
 }
 
 .info-section h1.fade-in {
@@ -102,7 +101,6 @@ html {
     border: none;
     border-radius: 8px;
     transition: background 0.3s, transform 0.3s;
-    outline: none;
 }
 
 .controls button:hover:not(:disabled) {
@@ -126,7 +124,6 @@ html {
     border-radius: 8px;
     transition: background 0.3s, transform 0.3s;
     font-family: 'Courier New', Courier, monospace;
-    outline: none;
 }
 
 .start-button:hover {
