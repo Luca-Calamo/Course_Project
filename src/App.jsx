@@ -38,7 +38,7 @@ const stages = [
     },
     {
         name: 'Black Hole',
-        image: '/assets/video/supernova.mp4',
+        image: '/assets/images/blackhole.png',
         description:
             'If the leftover core is massive enough, gravity overwhelms all resistance. It collapses into a point of extreme density called a singularity. Around it forms an event horizon where not even light can escape. This marks the birth of a black hole with intense gravitational effects.',
     },
@@ -60,12 +60,22 @@ function App() {
     const [hasSeenIntro, setHasSeenIntro] = useState(false);
     const videoRef = useRef(null);
     const stageVideoRef = useRef(null);
+    const audioRef = useRef(null);
     const [playStageVideo, setPlayStageVideo] = useState(false);
     const [stageVideoEnded, setStageVideoEnded] = useState(false);
     const [showSupernovaFlash, setShowSupernovaFlash] = useState(false);
+    const [isIntroExiting, setIsIntroExiting] = useState(false);
+    const [showStageBackground, setShowStageBackground] = useState(false);
+    const [isFirstStageEntry, setIsFirstStageEntry] = useState(true);
+    const [isMuted, setIsMuted] = useState(false);
 
     const handleLoadingComplete = () => {
         setIsLoading(false);
+        // Start audio immediately after loading completes
+        if (audioRef.current) {
+            audioRef.current.volume = 0.3;
+            audioRef.current.play().catch(console.error);
+        }
         // Start video 1 second after loading completes
         setTimeout(() => {
             setStartVideo(true);
@@ -77,6 +87,8 @@ function App() {
             videoRef.current.play();
         }
     }, [startVideo]);
+
+
 
     // Effect to handle returning to intro after seeing it once
     useEffect(() => {
@@ -119,9 +131,30 @@ function App() {
     }, [currentStage, showIntro]);
 
     const startJourney = () => {
-        setShowIntro(false);
-        setShowIntroText(false);
-        setHasSeenIntro(true);
+        // Ensure audio plays on user interaction
+        if (audioRef.current) {
+            audioRef.current.volume = 0.3;
+            audioRef.current.play().catch(console.error);
+        }
+        
+        setIsIntroExiting(true);
+        
+        // Step 1: Black overlay slides in (1s)
+        setTimeout(() => {
+            // Step 2: Change background scene when overlay covers screen
+            setShowStageBackground(true);
+        }, 1000);
+        
+        // Step 3: Overlay fades out (after 2s total)
+        setTimeout(() => {
+            // Step 4: Complete transition and start stage video
+            setShowIntro(false);
+            setShowIntroText(false);
+            setHasSeenIntro(true);
+            setIsIntroExiting(false);
+            setShowStageBackground(false);
+            setIsFirstStageEntry(true);
+        }, 3000); // Total transition time
     };
 
     const startAgain = () => {
@@ -138,6 +171,7 @@ function App() {
     const goToNextStage = () => {
         if (currentStage < stages.length - 1) {
             setIsTransitioning(true);
+            setIsFirstStageEntry(false);
             setTimeout(() => {
                 setCurrentStage(currentStage + 1);
                 setIsTransitioning(false);
@@ -161,10 +195,69 @@ function App() {
         }
     };
 
-    if (showIntro) {
+    const replayStage = () => {
+        setPlayStageVideo(false);
+        setStageVideoEnded(false);
+        setShowSupernovaFlash(false);
+        
+        if (stageVideoRef.current) {
+            stageVideoRef.current.currentTime = 0;
+            stageVideoRef.current.pause();
+        }
+        
+        // Restart the stage with same timing logic as original
+        if (currentStage === 4) {
+            // Supernova stage: 800ms delay -> flash -> video after 1s of flash
+            setTimeout(() => {
+                setShowSupernovaFlash(true);
+                // Start video as flash begins to fade (after 1s of flash)
+                setTimeout(() => {
+                    setPlayStageVideo(true);
+                }, 1000);
+            }, 800);
+        } else {
+            // All other stages: normal 1s delay
+            setTimeout(() => {
+                setPlayStageVideo(true);
+            }, 1000);
+        }
+    };
+
+    const toggleMute = () => {
+        const newMutedState = !isMuted;
+        setIsMuted(newMutedState);
+        
+        if (stageVideoRef.current) {
+            stageVideoRef.current.muted = newMutedState;
+        }
+        if (audioRef.current) {
+            audioRef.current.muted = newMutedState;
+            // Force audio to play if it's not already playing
+            if (!newMutedState && audioRef.current.paused) {
+                audioRef.current.play().catch(console.error);
+            }
+        }
+    };
+
+    if (showIntro || isIntroExiting) {
         return (
             <div className='app-container'>
+                {/* Background Audio - Available throughout app */}
+                <audio
+                    ref={audioRef}
+                    src="/assets/audio/space-vessel-background-noise-350616.mp3"
+                    loop
+                    muted={isMuted}
+                    preload="metadata"
+                    onLoadedData={() => console.log('Audio loaded successfully')}
+                    onError={(e) => console.error('Audio loading error:', e)}
+                    onPlay={() => console.log('Audio started playing')}
+                    onPause={() => console.log('Audio paused')}
+                    onCanPlayThrough={() => console.log('Audio can play through')}
+                />
+                
                 <div className='image-section'>
+                    {/* Intro Video */}
                     <video
                         ref={videoRef}
                         src={introVideo}
@@ -176,11 +269,28 @@ function App() {
                             setShowIntroText(true);
                         }}
                     />
+                    
+                    {/* Stage Video (loaded when overlay covers screen) */}
+                    {showStageBackground && (
+                        <video
+                            ref={stageVideoRef}
+                            src={stages[currentStage].image}
+                            className="stage-image stage-video-underneath"
+                            muted
+                            playsInline
+                            preload="auto"
+                        />
+                    )}
+                    
+                    {/* Black Transition Overlay */}
+                    {isIntroExiting && (
+                        <div className="black-transition-overlay"></div>
+                    )}
                 </div>
 
                 {isLoading && <Loading onComplete={handleLoadingComplete} />}
 
-                {showIntroText && (
+                {showIntroText && !isIntroExiting && (
                     <div className='intro-section intro-fade-in'>
                         <h1>The Life Cycle of a Massive Star</h1>
                         <button onClick={startJourney} className='start-button'>
@@ -194,18 +304,43 @@ function App() {
 
     return (
         <div className='app-container'>
+            {/* Background Audio - Available throughout app */}
+            <audio
+                ref={audioRef}
+                src="/assets/audio/space-vessel-background-noise-350616.mp3"
+                loop
+                muted={isMuted}
+                preload="auto"
+                volume={0.3}
+            />
+            
             <div className='image-section'>
-                <video
-                    ref={stageVideoRef}
-                    src={stages[currentStage].image}
-                    className={`stage-image ${
-                        isTransitioning ? 'fade-out' : 'fade-in'
-                    }`}
-                    muted
-                    playsInline
-                    preload="auto"
-                    onEnded={() => setStageVideoEnded(true)}
-                />
+                {/* Conditionally render video or image based on file extension */}
+                {stages[currentStage].image.endsWith('.png') || stages[currentStage].image.endsWith('.jpg') || stages[currentStage].image.endsWith('.jpeg') ? (
+                    <img
+                        src={stages[currentStage].image}
+                        className={`stage-image ${
+                            isTransitioning ? 'fade-out' : 'fade-in'
+                        }`}
+                        onLoad={() => {
+                            // For images, immediately set video ended to show InfoBoxes
+                            setTimeout(() => setStageVideoEnded(true), 100);
+                        }}
+                        alt={stages[currentStage].name}
+                    />
+                ) : (
+                    <video
+                        ref={stageVideoRef}
+                        src={stages[currentStage].image}
+                        className={`stage-image ${
+                            isTransitioning ? 'fade-out' : 'fade-in'
+                        }`}
+                        muted
+                        playsInline
+                        preload="auto"
+                        onEnded={() => setStageVideoEnded(true)}
+                    />
+                )}
                 
                 {/* InfoBox for Nebula stage - only show after video ends */}
                 {currentStage === 0 && stageVideoEnded && (
@@ -293,9 +428,21 @@ function App() {
                 {currentStage === 4 && showSupernovaFlash && (
                     <div className="supernova-flash"></div>
                 )}
+                
+                {/* Media Controls */}
+                <div className="media-controls">
+                    <button className="control-icon" onClick={toggleMute} title={isMuted ? "Unmute" : "Mute"}>
+                        <span className="material-icons">
+                            {isMuted ? "volume_off" : "volume_up"}
+                        </span>
+                    </button>
+                    <button className="control-icon" onClick={replayStage} title="Replay Stage">
+                        <span className="material-icons">replay</span>
+                    </button>
+                </div>
             </div>
 
-            <div className='info-section'>
+            <div className={`info-section ${isFirstStageEntry && currentStage === 0 ? 'slide-up-entry' : ''}`}>
                 <h1 className={isTransitioning ? 'fade-out' : 'fade-in'}>
                     {stages[currentStage].name}
                 </h1>

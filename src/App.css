@@ -49,6 +49,59 @@ html {
     transform: translateZ(0);
 }
 
+.info-section.slide-up-entry {
+    animation: slideUpFromBottom 1s ease-out forwards;
+}
+
+@keyframes slideUpFromBottom {
+    0% {
+        transform: translateY(100%) translateZ(0);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0) translateZ(0);
+        opacity: 1;
+    }
+}
+
+/* Media Controls */
+.media-controls {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+    z-index: 20;
+}
+
+.control-icon {
+    background: rgba(0, 0, 0, 0.7);
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.control-icon .material-icons {
+    font-size: 24px;
+    color: white;
+}
+
+.control-icon:hover {
+    background: rgba(0, 0, 0, 0.9);
+    transform: scale(1.1);
+}
+
+.control-icon:active {
+    transform: scale(0.95);
+}
+
 .info-section h1 {
     font-family: 'Orbitron', monospace;
     color: white;
@@ -215,5 +268,56 @@ html {
     100% {
         opacity: 0;
         visibility: hidden;
+    }
+}
+
+/* Intro to Stage Transition Effects */
+.stage-video-underneath {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.black-transition-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+    z-index: 999;
+    animation: slideInAndFadeOut 3s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+    filter: blur(0px);
+    will-change: transform, opacity, filter;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+}
+
+@keyframes slideInAndFadeOut {
+    0% {
+        transform: translate3d(100%, 0, 0);
+        opacity: 1;
+        filter: blur(6px);
+    }
+    25% {
+        transform: translate3d(0%, 0, 0);
+        opacity: 1;
+        filter: blur(2px);
+    }
+    33% {
+        transform: translate3d(0, 0, 0);
+        opacity: 1;
+        filter: blur(0px);
+    }
+    66% {
+        transform: translate3d(0, 0, 0);
+        opacity: 1;
+        filter: blur(0px);
+    }
+    100% {
+        transform: translate3d(0, 0, 0);
+        opacity: 0;
+        filter: blur(0px);
     }
 }
