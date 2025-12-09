@@ -1,0 +1,156 @@
+.loading-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    transition: opacity 0.8s ease-out;
+}
+
+.loading-container.fade-out {
+    opacity: 0;
+}
+
+.loading-content {
+    text-align: center;
+    color: white;
+    max-width: 600px;
+    padding: 2rem;
+}
+
+.loading-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 4rem;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+    letter-spacing: 2px;
+}
+
+.loading-progress-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.progress-percentage {
+    font-family: 'Orbitron', monospace;
+    font-size: 3rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+    min-height: 3rem;
+}
+
+.progress-bar-container {
+    width: 400px;
+    height: 8px;
+    background-color: #333333;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid #555555;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ffffff 0%, #cccccc 50%, #ffffff 100%);
+    transition: width 0.1s ease-out;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.loading-text {
+    font-family: 'Roboto', Arial, sans-serif;
+    font-size: 1.1rem;
+    color: #cccccc;
+    font-weight: 300;
+    letter-spacing: 1px;
+    min-height: 1.5rem;
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* Animation for the progress bar */
+.progress-bar-fill {
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -400px 0;
+    }
+    100% {
+        background-position: 400px 0;
+    }
+}
+
+/* Responsive design */
+/* Star flash effect */
+.star-flash {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.star-dot {
+    width: 8px;
+    height: 8px;
+    background-color: white;
+    border-radius: 50%;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+    animation: starFlash 2s ease-in-out;
+}
+
+@keyframes starFlash {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+        box-shadow: 0 0 0 rgba(255, 255, 255, 0);
+    }
+    20% {
+        opacity: 1;
+        transform: scale(1);
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.5);
+        box-shadow: 0 0 40px rgba(255, 255, 255, 1);
+    }
+    80% {
+        opacity: 0.8;
+        transform: scale(1);
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.5);
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    }
+}
+
+@media (max-width: 768px) {
+    .loading-title {
+        font-size: 2rem;
+        margin-bottom: 3rem;
+    }
+    
+    .progress-percentage {
+        font-size: 2.5rem;
+    }
+    
+    .progress-bar-container {
+        width: 300px;
+    }
+    
+    .loading-content {
+        padding: 1rem;
+    }
+}

@@ -1,0 +1,135 @@
+.info-box {
+    z-index: 100;
+    cursor: pointer;
+}
+
+.info-box.fade-in {
+    animation: fadeInInfoBox 0.8s ease-out;
+}
+
+/* White Circle */
+.info-circle {
+    width: 8px;
+    height: 8px;
+    background-color: rgb(0, 0, 0);
+    border-radius: 50%;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    border: 4px solid rgba(255, 255, 255, 0.8);
+    z-index: 5;
+}
+
+.info-circle:hover {
+    transform: scale(1.1);
+    /* box-shadow: 0 0 15px rgba(255, 255, 255, 0.6); */
+    cursor: crosshair;
+}
+
+.info-circle.expanded {
+    /* background-color: #f0f0f0; */
+}
+
+.circle-inner {
+    width: 50%;
+    height: 50%;
+    border-radius: 50%;
+    position: relative;
+}
+
+.circle-inner::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    /* background-color: #666; */
+    border-radius: 50%;
+    opacity: 0.7;
+}
+
+/* Animated Line */
+.info-line {
+    position: absolute;
+    top: 10px; /* Center of circle (20px / 2) */
+    left: 10px; /* Center of circle (20px / 2) */
+    height: 2px;
+    background: linear-gradient(90deg, rgb(0, 0, 0), rgba(0, 0, 0, 0.6));
+    transform-origin: left center;
+    animation: drawLine 0.4s ease-out;
+    /* box-shadow: 0 0 5px rgba(255, 255, 255, 0.4); */
+}
+
+@keyframes drawLine {
+    from {
+        width: 0;
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Text Box */
+.info-text-box {
+    position: absolute;
+    width: 200px;
+    /* margin: 8px 8px 8px 8px; */
+    padding: 12px 16px;
+    background-color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
+    border-radius: 8px;
+    font-family: 'Roboto', Arial, sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    animation: fadeInText 0.3s ease-out 0.2s both;
+    transform-origin: top left;
+    z-index: 101;
+}
+
+/* Connector triangle removed - text box now positioned adjacent to line */
+
+@keyframes fadeInText {
+    from {
+        opacity: 0;
+        transform: scale(0.8) translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .info-text-box {
+        width: 180px;
+        font-size: 0.85rem;
+        padding: 10px 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .info-text-box {
+        width: 160px;
+        font-size: 0.8rem;
+        padding: 8px 12px;
+    }
+}
+
+/* Fade-in animation for InfoBox */
+@keyframes fadeInInfoBox {
+    from {
+        opacity: 0;
+        transform: scale(0.8) translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
