@@ -44,7 +44,7 @@ const stages = [
     },
     {
         name: 'Heat Death',
-        image: '/assets/video/intro.mp4',
+        image: null,
         description:
             'Over unimaginable spans of time, black holes slowly evaporate away. With no stars or energy sources remaining, the universe grows cold. It eventually reaches maximum entropy, where no processes can occur. This final state is known as the heat death of the universe.',
     },
@@ -109,8 +109,14 @@ function App() {
             setStageVideoEnded(false); // Reset video ended state
             setShowSupernovaFlash(false); // Reset flash state
 
+            // Special handling for Heat Death stage (stage 6) - no video
+            if (currentStage === 6) {
+                setTimeout(() => {
+                    setStageVideoEnded(true); // Immediately show info boxes
+                }, 500);
+            }
             // Special handling for supernova stage (stage 4)
-            if (currentStage === 4) {
+            else if (currentStage === 4) {
                 // Supernova stage: 1s delay -> flash -> video during fade
                 setTimeout(() => {
                     setShowSupernovaFlash(true);
@@ -317,10 +323,16 @@ function App() {
             />
 
             <div className='image-section'>
-                {/* Conditionally render video or image based on file extension */}
-                {stages[currentStage].image.endsWith('.png') ||
-                stages[currentStage].image.endsWith('.jpg') ||
-                stages[currentStage].image.endsWith('.jpeg') ? (
+                {/* Conditionally render video, image, or black background */}
+                {stages[currentStage].image === null ? (
+                    <div
+                        className={`stage-image black-background ${
+                            isTransitioning ? 'fade-out' : 'fade-in'
+                        }`}
+                    />
+                ) : stages[currentStage].image.endsWith('.png') ||
+                  stages[currentStage].image.endsWith('.jpg') ||
+                  stages[currentStage].image.endsWith('.jpeg') ? (
                     <img
                         src={stages[currentStage].image}
                         className={`stage-image ${
