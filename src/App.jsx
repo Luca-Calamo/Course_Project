@@ -38,7 +38,7 @@ const stages = [
     },
     {
         name: 'Black Hole',
-        image: '/assets/images/blackhole.png',
+        image: '/assets/video/blackhole.mp4',
         description:
             'If the leftover core is massive enough, gravity overwhelms all resistance. It collapses into a point of extreme density called a singularity. Around it forms an event horizon where not even light can escape. This marks the birth of a black hole with intense gravitational effects.',
     },
@@ -88,8 +88,6 @@ function App() {
         }
     }, [startVideo]);
 
-
-
     // Effect to handle returning to intro after seeing it once
     useEffect(() => {
         if (showIntro && hasSeenIntro && videoRef.current) {
@@ -110,7 +108,7 @@ function App() {
             setPlayStageVideo(false);
             setStageVideoEnded(false); // Reset video ended state
             setShowSupernovaFlash(false); // Reset flash state
-            
+
             // Special handling for supernova stage (stage 4)
             if (currentStage === 4) {
                 // Supernova stage: 1s delay -> flash -> video during fade
@@ -136,15 +134,15 @@ function App() {
             audioRef.current.volume = 0.3;
             audioRef.current.play().catch(console.error);
         }
-        
+
         setIsIntroExiting(true);
-        
+
         // Step 1: Black overlay slides in (1s)
         setTimeout(() => {
             // Step 2: Change background scene when overlay covers screen
             setShowStageBackground(true);
         }, 1000);
-        
+
         // Step 3: Overlay fades out (after 2s total)
         setTimeout(() => {
             // Step 4: Complete transition and start stage video
@@ -199,12 +197,12 @@ function App() {
         setPlayStageVideo(false);
         setStageVideoEnded(false);
         setShowSupernovaFlash(false);
-        
+
         if (stageVideoRef.current) {
             stageVideoRef.current.currentTime = 0;
             stageVideoRef.current.pause();
         }
-        
+
         // Restart the stage with same timing logic as original
         if (currentStage === 4) {
             // Supernova stage: 800ms delay -> flash -> video after 1s of flash
@@ -226,7 +224,7 @@ function App() {
     const toggleMute = () => {
         const newMutedState = !isMuted;
         setIsMuted(newMutedState);
-        
+
         if (stageVideoRef.current) {
             stageVideoRef.current.muted = newMutedState;
         }
@@ -245,17 +243,21 @@ function App() {
                 {/* Background Audio - Available throughout app */}
                 <audio
                     ref={audioRef}
-                    src="/assets/audio/space-vessel-background-noise-350616.mp3"
+                    src='/assets/audio/space-vessel-background-noise-350616.mp3'
                     loop
                     muted={isMuted}
-                    preload="metadata"
-                    onLoadedData={() => console.log('Audio loaded successfully')}
+                    preload='metadata'
+                    onLoadedData={() =>
+                        console.log('Audio loaded successfully')
+                    }
                     onError={(e) => console.error('Audio loading error:', e)}
                     onPlay={() => console.log('Audio started playing')}
                     onPause={() => console.log('Audio paused')}
-                    onCanPlayThrough={() => console.log('Audio can play through')}
+                    onCanPlayThrough={() =>
+                        console.log('Audio can play through')
+                    }
                 />
-                
+
                 <div className='image-section'>
                     {/* Intro Video */}
                     <video
@@ -269,22 +271,22 @@ function App() {
                             setShowIntroText(true);
                         }}
                     />
-                    
+
                     {/* Stage Video (loaded when overlay covers screen) */}
                     {showStageBackground && (
                         <video
                             ref={stageVideoRef}
                             src={stages[currentStage].image}
-                            className="stage-image stage-video-underneath"
+                            className='stage-image stage-video-underneath'
                             muted
                             playsInline
-                            preload="auto"
+                            preload='auto'
                         />
                     )}
-                    
+
                     {/* Black Transition Overlay */}
                     {isIntroExiting && (
-                        <div className="black-transition-overlay"></div>
+                        <div className='black-transition-overlay'></div>
                     )}
                 </div>
 
@@ -307,16 +309,18 @@ function App() {
             {/* Background Audio - Available throughout app */}
             <audio
                 ref={audioRef}
-                src="/assets/audio/space-vessel-background-noise-350616.mp3"
+                src='/assets/audio/space-vessel-background-noise-350616.mp3'
                 loop
                 muted={isMuted}
-                preload="auto"
+                preload='auto'
                 volume={0.3}
             />
-            
+
             <div className='image-section'>
                 {/* Conditionally render video or image based on file extension */}
-                {stages[currentStage].image.endsWith('.png') || stages[currentStage].image.endsWith('.jpg') || stages[currentStage].image.endsWith('.jpeg') ? (
+                {stages[currentStage].image.endsWith('.png') ||
+                stages[currentStage].image.endsWith('.jpg') ||
+                stages[currentStage].image.endsWith('.jpeg') ? (
                     <img
                         src={stages[currentStage].image}
                         className={`stage-image ${
@@ -337,27 +341,27 @@ function App() {
                         }`}
                         muted
                         playsInline
-                        preload="auto"
+                        preload='auto'
                         onEnded={() => setStageVideoEnded(true)}
                     />
                 )}
-                
+
                 {/* InfoBox for Nebula stage - only show after video ends */}
                 {currentStage === 0 && stageVideoEnded && (
                     <>
                         <InfoBox
-                            text="Nebulae are recycled material formed from the remains of older stars that exploded long ago."
+                            text='Nebulae are recycled material formed from the remains of older stars that exploded long ago.'
                             lineLength={200}
                             angle={200}
                             position={{ x: 900, y: 300 }}
-                            className="nebula-info"
+                            className='nebula-info'
                         />
                         <InfoBox
-                            text="Some nebulae glow because nearby stars energize the gas, making it shine."
+                            text='Some nebulae glow because nearby stars energize the gas, making it shine.'
                             lineLength={150}
                             angle={120}
                             position={{ x: 500, y: 600 }}
-                            className="nebula-info-2"
+                            className='nebula-info-2'
                         />
                     </>
                 )}
@@ -365,11 +369,11 @@ function App() {
                 {currentStage === 1 && stageVideoEnded && (
                     <>
                         <InfoBox
-                            text="The core heats up because of gravity, not fusion. It’s like a star still ‘under construction."
+                            text='The core heats up because of gravity, not fusion. It’s like a star still ‘under construction.'
                             lineLength={200}
                             angle={200}
                             position={{ x: 790, y: 450 }}
-                            className="nebula-info"
+                            className='nebula-info'
                         />
                     </>
                 )}
@@ -377,11 +381,11 @@ function App() {
                 {currentStage === 2 && stageVideoEnded && (
                     <>
                         <InfoBox
-                            text="Most stars spend about 90% of their lives in this stable phase."
+                            text='Most stars spend about 90% of their lives in this stable phase.'
                             lineLength={200}
                             angle={200}
                             position={{ x: 820, y: 470 }}
-                            className="nebula-info"
+                            className='nebula-info'
                         />
                     </>
                 )}
@@ -389,18 +393,18 @@ function App() {
                 {currentStage === 3 && stageVideoEnded && (
                     <>
                         <InfoBox
-                            text="The star expands to hundreds of times its original size — it would engulf many planets in its system."
+                            text='The star expands to hundreds of times its original size — it would engulf many planets in its system.'
                             lineLength={200}
                             angle={150}
                             position={{ x: 820, y: 470 }}
-                            className="nebula-info"
+                            className='nebula-info'
                         />
                         <InfoBox
-                            text="Red supergiants are unstable and lose mass rapidly through stellar winds."
+                            text='Red supergiants are unstable and lose mass rapidly through stellar winds.'
                             lineLength={200}
                             angle={200}
                             position={{ x: 902, y: 200 }}
-                            className="nebula-info"
+                            className='nebula-info'
                         />
                     </>
                 )}
@@ -408,41 +412,55 @@ function App() {
                 {currentStage === 4 && stageVideoEnded && (
                     <>
                         <InfoBox
-                            text="For a brief moment, a supernova can shine brighter than an entire galaxy."
+                            text='For a brief moment, a supernova can shine brighter than an entire galaxy.'
                             lineLength={200}
                             angle={200}
                             position={{ x: 600, y: 470 }}
-                            className="nebula-info"
+                            className='nebula-info'
                         />
                         <InfoBox
-                            text="Elements like gold, silver, and iron are formed and released in the explosion."
+                            text='Elements like gold, silver, and iron are formed and released in the explosion.'
                             lineLength={200}
                             angle={320}
                             position={{ x: 850, y: 350 }}
-                            className="nebula-info"
+                            className='nebula-info'
                         />
                     </>
                 )}
-                
+
                 {/* Supernova Flash Effect */}
                 {currentStage === 4 && showSupernovaFlash && (
-                    <div className="supernova-flash"></div>
+                    <div className='supernova-flash'></div>
                 )}
-                
+
                 {/* Media Controls */}
-                <div className="media-controls">
-                    <button className="control-icon" onClick={toggleMute} title={isMuted ? "Unmute" : "Mute"}>
-                        <span className="material-icons">
-                            {isMuted ? "volume_off" : "volume_up"}
+                <div className='media-controls'>
+                    <button
+                        className='control-icon'
+                        onClick={toggleMute}
+                        title={isMuted ? 'Unmute' : 'Mute'}
+                    >
+                        <span className='material-icons'>
+                            {isMuted ? 'volume_off' : 'volume_up'}
                         </span>
                     </button>
-                    <button className="control-icon" onClick={replayStage} title="Replay Stage">
-                        <span className="material-icons">replay</span>
+                    <button
+                        className='control-icon'
+                        onClick={replayStage}
+                        title='Replay Stage'
+                    >
+                        <span className='material-icons'>replay</span>
                     </button>
                 </div>
             </div>
 
-            <div className={`info-section ${isFirstStageEntry && currentStage === 0 ? 'slide-up-entry' : ''}`}>
+            <div
+                className={`info-section ${
+                    isFirstStageEntry && currentStage === 0
+                        ? 'slide-up-entry'
+                        : ''
+                }`}
+            >
                 <h1 className={isTransitioning ? 'fade-out' : 'fade-in'}>
                     {stages[currentStage].name}
                 </h1>
