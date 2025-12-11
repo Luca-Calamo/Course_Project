@@ -38,7 +38,7 @@ const stages = [
     },
     {
         name: 'Black Hole',
-        image: '/assets/video/blackhole.mp4',
+        image: '/assets/video/blackhole_good.mp4',
         description:
             'If the leftover core is massive enough, gravity overwhelms all resistance. It collapses into a point of extreme density called a singularity. Around it forms an event horizon where not even light can escape. This marks the birth of a black hole with intense gravitational effects.',
     },
@@ -467,7 +467,7 @@ function App() {
                             text='Time slows dramatically near a black hole due to extreme gravity.'
                             lineLength={200}
                             angle={320}
-                            position={{ x: 820, y: 470 }}
+                            position={{ x: 500, y: 320 }}
                             className='nebula-info'
                         />
                     </>
