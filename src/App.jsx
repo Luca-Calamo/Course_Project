@@ -109,14 +109,24 @@ function App() {
             setStageVideoEnded(false); // Reset video ended state
             setShowSupernovaFlash(false); // Reset flash state
 
-            // Special handling for Heat Death stage (stage 6) - no video
+            // Handle background music based on stage
             if (currentStage === 6) {
+                // Stop the background music for the final stage (Heat Death)
+                if (audioRef.current && !audioRef.current.paused) {
+                    audioRef.current.pause();
+                }
                 setTimeout(() => {
                     setStageVideoEnded(true); // Immediately show info boxes
                 }, 500);
+            } else {
+                // Resume music for all other stages if it was paused
+                if (audioRef.current && audioRef.current.paused && !isMuted) {
+                    audioRef.current.play().catch(console.error);
+                }
             }
+
             // Special handling for supernova stage (stage 4)
-            else if (currentStage === 4) {
+            if (currentStage === 4) {
                 // Supernova stage: 1s delay -> flash -> video during fade
                 setTimeout(() => {
                     setShowSupernovaFlash(true);
@@ -169,6 +179,10 @@ function App() {
             setShowIntroText(true);
         } else {
             setShowIntroText(false);
+        }
+        // Restart the background music when going back to beginning
+        if (audioRef.current && audioRef.current.paused) {
+            audioRef.current.play().catch(console.error);
         }
     };
 
@@ -435,6 +449,25 @@ function App() {
                             lineLength={200}
                             angle={320}
                             position={{ x: 850, y: 350 }}
+                            className='nebula-info'
+                        />
+                    </>
+                )}
+                {/* InfoBox for blackhole stage - only show after video ends */}
+                {currentStage === 5 && stageVideoEnded && (
+                    <>
+                        <InfoBox
+                            text='The black hole’s boundary, the event horizon, marks the point where escape becomes impossible.'
+                            lineLength={200}
+                            angle={200}
+                            position={{ x: 400, y: 600 }}
+                            className='nebula-info'
+                        />
+                        <InfoBox
+                            text='Time slows dramatically near a black hole due to extreme gravity.'
+                            lineLength={200}
+                            angle={320}
+                            position={{ x: 820, y: 470 }}
                             className='nebula-info'
                         />
                     </>
